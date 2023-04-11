@@ -1,0 +1,903 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-03-25 ven. 14:32 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lab on Attacking the Lab &#x2013; Solutions</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Pierre AYOUB" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Lab on Attacking the Lab &#x2013; Solutions</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgb2d69d6">1. Warm Up: Listening to Some Interesting Audio</a>
+<ul>
+<li><a href="#org13a8272">1.1. Listen to Local FM Radio Stations</a></li>
+<li><a href="#orgf271f9d">1.2. Listen to Our Transmitter</a></li>
+</ul>
+</li>
+<li><a href="#org2592fb0">2. Exercise: Reversing the Remote of the Lab's Curtains</a>
+<ul>
+<li><a href="#orga98ab21">2.1. Reconnaissance</a></li>
+<li><a href="#org62afd47">2.2. Using the Universal Radio Hacker (URH) to Reverse the Protocol</a>
+<ul>
+<li><a href="#org57ebdeb">2.2.1. Demodulation (ASK)</a></li>
+<li><a href="#org527a235">2.2.2. Decoding (Manchester-I)</a></li>
+<li><a href="#org120cf1a">2.2.3. Decryption (XOR)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org355188f">3. Bonus: Spoof the Remote by Transmitting an "Open" Command</a></li>
+<li><a href="#org100a5d8">4. Bonus: Reversing the Hardware of the Remote</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgb2d69d6" class="outline-2">
+<h2 id="orgb2d69d6"><span class="section-number-2">1.</span> Warm Up: Listening to Some Interesting Audio</h2>
+<div class="outline-text-2" id="text-1">
+<dl class="org-dl">
+<dt>Question 1</dt><dd>A SDR is a radio transceiver where (de)modulation, filters
+and other components traditionally implemented in analog hardware are
+instead implemented in software running on digital hardware. Thus, it is
+more flexible because a lot of parameters can be changed at runtime.</dd>
+<dt>Question 2</dt><dd>The frequency range of the RTL-SDR range from 500 kHz up to
+1.75 GHz.</dd>
+</dl>
+</div>
+
+<div id="outline-container-org13a8272" class="outline-3">
+<h3 id="org13a8272"><span class="section-number-3">1.1.</span> Listen to Local FM Radio Stations</h3>
+<div class="outline-text-3" id="text-1-1">
+<dl class="org-dl">
+<dt>Question 3</dt><dd>It is an algorithm (implemented in hardware on a circuit or
+software) used to control the gain of the receiver automatically in order
+to have a constant output level, avoiding saturation, clipping, or too low
+output.</dd>
+<dt>Question 4</dt><dd>The frequency has to be set to the carrier of an FM station
+(with an offset to avoid DC component). The filter has to match the
+bandwidth of the FM signal, generally between 100 or 200 kHz.</dd>
+<dt>Question 5</dt><dd>Yes, we can, in a bad quality. The reason is that the signal
+amplitude (which is constant in FM) follows the frequency that is
+currently used by the modulation (which is not constant in FM). The
+frequency shifting left and right on a spectrum, this cause a slightly
+amplitude change (AM) as function of this frequency shift (FM). Thus, the
+AM receiver is able to reconstruct a low-quality signal based on this
+amplitude change.</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-orgf271f9d" class="outline-3">
+<h3 id="orgf271f9d"><span class="section-number-3">1.2.</span> Listen to Our Transmitter</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>Listen to the <a href="exo1/complex/message.complex"><code>message.complex</code></a> file with GQRX, to do so, use the IQ file
+option and set the device string accordingly:
+<code>file=/full/path/message.complex,freq=433.92e6,rate=192e3,repeat=true,throttle=true</code>.
+Then set modulation to <code>WFM (mono)</code> and the filter width to the entire
+bandwidth of the signal.</li>
+<li>You must understand <code>Hello, you are on radio non-sense, 31, 12, 31, 9,
+     12</code>.</li>
+<li>These numbers corresponds to a secret message in ASCII encrypted with a
+one-time pad encryption scheme.</li>
+<li>The <a href="exo1/scripts/number_station_rx.py"><code>number_station_rx.py</code></a> script can be used to decrypt the message,
+which is: <code>hello</code>.</li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 6</dt><dd>This is a number station, a radio station which broadcast
+numbers. Those numbers corresponds to a message, and are often obfuscated
+or encrypted.</dd>
+<dt>Question 7</dt><dd>The radio carrier is Frequency Modulated (FM).</dd>
+<dt>Question 8</dt><dd>The original secret message is <code>hello</code>, once decrypted with
+the one-time pad.</dd>
+<dt>Question 9</dt><dd>We can use the squelch function, used to mute a channel when
+there is no activity on it.</dd>
+</dl>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2592fb0" class="outline-2">
+<h2 id="org2592fb0"><span class="section-number-2">2.</span> Exercise: Reversing the Remote of the Lab's Curtains</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orga98ab21" class="outline-3">
+<h3 id="orga98ab21"><span class="section-number-3">2.1.</span> Reconnaissance</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>The resonator is the Epcos R904. Its datasheet can be found on
+<a href="https://www.chipfind.net/datasheet/pdf/epcos/r904.pdf">ChipFind.net</a>.</li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 10</dt><dd>The resonator is used to generate the carrier wave that
+will be modulated by the control signal.</dd>
+<dt>Question 11</dt><dd>The frequency of the carrier is at 433.42 MHz.</dd>
+<dt>Question 12</dt><dd>Considering the very simple architecture of the remote
+control, it is highly probable that we will have an OOK modulation scheme,
+where the modulation is achieved by simply turning on and off the carrier
+which only needs a transistor acting like a switch.</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org62afd47" class="outline-3">
+<h3 id="org62afd47"><span class="section-number-3">2.2.</span> Using the Universal Radio Hacker (URH) to Reverse the Protocol</h3>
+<div class="outline-text-3" id="text-2-2">
+</div>
+<div id="outline-container-org57ebdeb" class="outline-4">
+<h4 id="org57ebdeb"><span class="section-number-4">2.2.1.</span> Demodulation (ASK)</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<ul class="org-ul">
+<li><p>
+Open the <a href="exo2/complex/RTL-SDR-433_420MHz-1MSps.complex"><code>RTL-SDR-433_420MHz-1MSps.complex</code></a> file in <i>URH</i>. You will
+end-up with this, in the <code>Interpretation</code> tab:
+</p>
+
+
+<div id="org08f651b" class="figure">
+<p><img src="pics/2021-01-11_14-33-34_screenshot.png" alt="2021-01-11_14-33-34_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>After opening the complex file, we see 6 packets.</p>
+</div>
+
+<p>
+We see 6 packets, each one composed of a brief pulse at the beginning, then a
+longer one. In our recording, each group of 2 packets corresponds to a
+different button, where each packet correspond to one button press.
+</p></li>
+
+<li><p>
+Zoom into the signal, no matter where. We see that there is no frequency
+change nor amplitude change in our signal, only pulsation (carrier is on or
+off). This is a particular type of ASK (Amplitude Shift Keying), called OOK
+(On-Off Keying):
+</p>
+
+
+<div id="org5790949" class="figure">
+<p><img src="pics/2021-01-11_14-41-11_screenshot.png" alt="2021-01-11_14-41-11_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 2: </span>Zooming into the signal to search the modulation type.</p>
+</div></li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 13</dt><dd>The modulation used is On-Off Keying (OOK).</dd>
+</dl>
+
+
+<ul class="org-ul">
+<li><p>
+We want to search the smallest transmitted symbol in our signal, in order to
+find the symbol length. This is the information unit in our
+transmission. Once we have find one smallest symbol (there are many), we can
+measure it's length with <i>URH</i>:
+</p>
+
+
+<div id="org4169745" class="figure">
+<p><img src="pics/2021-01-11_14-45-45_screenshot.png" alt="2021-01-11_14-45-45_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 3: </span>Measuring the length of the smallest symbol.</p>
+</div>
+
+<p>
+Here, the symbol length is approximately of 648 samples. Since we have a
+signal sampled at 1 MSps (1 million of samples per second), 648 samples is
+equal to 648 µs (as displayed by URH). If the signal would have been sampled
+to 2 MSps, then the number of samples would have been equal to approximately
+1296, which still corresponds to 648 µs \((\frac{1e6}{2e6 / 1296} = 648)\).
+</p></li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 14</dt><dd>The symbol length in µs is equal to 648 µs.</dd>
+</dl>
+
+
+<ul class="org-ul">
+<li><p>
+Set the parameters into URH. Your must see this:
+</p>
+
+
+<div id="orga4fd395" class="figure">
+<p><img src="pics/2021-01-11_16-45-42_screenshot.png" alt="2021-01-11_16-45-42_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 4: </span>Result of our demodulated signal.</p>
+</div></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org527a235" class="outline-4">
+<h4 id="org527a235"><span class="section-number-4">2.2.2.</span> Decoding (Manchester-I)</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<ul class="org-ul">
+<li><p>
+No that we have a demodulated message, we will start the analysis of the
+protocol in the <code>Analysis</code> tab. At the beginning of each packet, we observe
+that we the short pulses before the long ones are sequences of 17 bit set
+to 1 (<code>11111111111111111</code>), taking approximately 10000 ms. They are used to
+wake-up the receiver by sending a preamble message. Since they contain no
+data, we can hide these rows to analyze the protocol.
+</p>
+
+<p>
+We end up with this:
+</p>
+
+
+<div id="org6169813" class="figure">
+<p><img src="pics/2021-01-11_16-51-01_screenshot.png" alt="2021-01-11_16-51-01_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 5: </span>Analysis tab after hiding preamble messages used to wake-up the receiver.</p>
+</div></li>
+
+<li><p>
+We want to find the encoding scheme of the original message. To that, we have
+to know the different line encoding that exists and to look at the message we
+get, comparing it to what we know.
+</p>
+
+<p>
+We enable <code>Mark diffs in protocol</code>, and starting from the left of the
+message, we have some sequences of 4 bits set to 1 and 4 bits set to 0
+(<code>1111000011110000</code>). Past bit 24 (included), we observe that we never
+see again a sequence of 1 or 0 longer than 2 bits (<code>11</code> or
+<code>00</code>). Moreover, if we group bits by 2 from bit 25 (included), we only
+obtain groups of <code>01</code> and <code>10</code>. This strongly suggest a <i>Manchester
+encoding</i>. Finally, looking at bits 35 to 40, we observe a counter that
+is incremented, displayed after its encoding by a Manchester code, which
+confirm our guess. In fact, a group of bits equal to <code>01</code> (<i>low-to-high
+transition</i>) in Manchester code is equal to a logical <code>1</code>, and a <code>10</code>
+(<i>high-to-low transition</i>) equal to a <code>0</code>. This is the Manchester
+encoding described in the <i>IEEE 802.3 norm</i> (and not the Manchester
+encoding described previously <i>G. E. Thomas</i>), as there is two
+conventions. Thus, for the counter, <code>1001</code> encoded is equal to <code>01</code>
+decoded, and <code>0110</code> is equal to <code>10</code> (incremented!), and so on. Since we
+assume that the message is Manchester encoded, then, the sequences of
+<code>1111</code> and <code>0000</code> at the beginning are invalid. They are used to indicate
+to the receiver the beginning of a packet and synchronize its clock.
+</p>
+
+
+<div id="orgdd092d0" class="figure">
+<p><img src="pics/2021-01-11_17-22-49_screenshot.png" alt="2021-01-11_17-22-49_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 6: </span>We suggest a Manchester encoding and we start to identify the Synchronization and Counter field.</p>
+</div></li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 15</dt><dd>The remote control use the IEEE 802.3 Manchester encoding,
+where a received <code>01</code> is equal to a logical <code>1</code> and a received <code>10</code> is
+equal to a logical <code>0</code>.</dd>
+</dl>
+
+
+<ul class="org-ul">
+<li><p>
+To analyze the data, we will have to ignore the Synchronization field
+since it does not contain any real data. To know exactly where the data
+start, we look at our counter, bit 35 to 40. It is highly improbable that
+our counter is only on 3 bits (before Manchester decoding). Lets assume
+that it is on 4 bit (we can confirm that by analyzing more traces), then
+it start at bit 33 (included) and end at bit 40 (included). Then, to
+complete one byte, we have a 4-bit value from bit 25 to bit 32
+(<code>01100110</code> in Manchester encoding, <code>1010</code> after decoding, corresponding
+to <code>0xA</code>).
+</p>
+
+
+<div id="org7ad6ab5" class="figure">
+<p><img src="pics/2021-01-11_17-54-22_screenshot.png" alt="2021-01-11_17-54-22_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 7: </span>We identified a Fixed field and the entire Counter field.</p>
+</div>
+
+<p>
+We will end-up with this message by setting <code>Decoding</code> to <code>Manchester-I</code>.
+When changing decoding, you will have to set the label manually again, URH
+doesn't do that automatically. We are now ready to analyze the actual data
+of the packet.
+</p>
+
+
+<div id="org4402c0e" class="figure">
+<p><img src="pics/2021-01-11_18-52-02_screenshot.png" alt="2021-01-11_18-52-02_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 8: </span>We change the encoding for <code>Manchester-I</code>. We can now directly see the Counter increment.</p>
+</div></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org120cf1a" class="outline-4">
+<h4 id="org120cf1a"><span class="section-number-4">2.2.3.</span> Decryption (XOR)</h4>
+<div class="outline-text-4" id="text-2-2-3">
+<ul class="org-ul">
+<li><p>
+Now that we have a decoded message, we have the actual transmitted
+data. However, an encryption layer can still exist on the data, either on
+the entire packet or only on a part of it. In order to reverse the
+protocol, we will speculate on mandatory or possible fields inside the
+message:
+</p>
+<dl class="org-dl">
+<dt>Synchronization (<code>Sync</code>)</dt><dd>Only relevant for the physical radio layer
+and not for the upper layers.</dd>
+<dt>Fixed (<code>0xA</code>)</dt><dd>We already identified a fixed 4-bit field at the
+beginning of every message (<code>0xA</code> after decoding).</dd>
+<dt>Counter (<code>Ctr</code>)</dt><dd>We already identified a counter at the lowermost 4-bit
+the first byte of the transmitted data. It could be used in an encryption
+process (like a key), or as it to avoid replay attack.</dd>
+<dt>Control Code (<code>Ctrl</code>)</dt><dd>Different buttons lives on the remote
+controller, then, a unique fixed code must be sent to the target to
+identify each button separately.</dd>
+<dt>Address (<code>Addr</code>)</dt><dd>When we use our own remote controller with our own
+target, we don't want to control the neighbor's target &#x2013; at least, the
+manufacturer don't want this. Then, a unique address of our own target
+has to be embedded in the message.</dd>
+<dt>Checksum (<code>Chk</code>)</dt><dd>This one is not mandatory, but very common, because
+it's cheap, very easy and useful to check for bad message and correct
+some minor issues.</dd>
+<dt>Rolling Code (<code>RC</code>)</dt><dd>In a blink of an eye, we see that there is a lot
+of data which change between each button press, even for the same
+button. This suggest an encrypted rolling code, as we don't see any clear
+pattern yet.</dd>
+</dl>
+
+<p>
+Other fields could be present in the message. If we at least identify the
+mandatory and the very probable fields cited above, the unknown last fields
+could be deduced later.
+</p></li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 16</dt><dd>We expect to see at least Counter, a Control Code, an
+Address fields, and maybe a Rolling Code, a Checksum, a Synchronization
+fields.</dd>
+</dl>
+
+
+<ul class="org-ul">
+<li><p>
+Continuing from the <i>Counter</i> (<code>Ctr</code>) to the right, we observe a 4-bit
+field (bit 14 to 17) which change only when we we change the pressed
+button. This strongly suggest that this field is the <i>Control Code</i>
+(<code>Ctrl</code>). Since this only take half of the current byte, the next 4 bits
+represent certainly another field, but we have any clue here. Continuing
+analysis from left to right, we then only have bits that flips between
+message without any particular meaning. That suggest that at least the rest
+of the message is encrypted. Currently, we got this:
+</p>
+
+
+<div id="org7a0fb2e" class="figure">
+<p><img src="pics/2021-02-15_12-06-52_screenshot.png" alt="2021-02-15_12-06-52_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 9: </span>We identified the Control Code field and delimited other fields for investigation.</p>
+</div></li>
+
+<li>At this point, in real life, you would have to do some experiments with the
+packets to understand how the encryption/obfuscation of the message
+works. Here, we don't have enough time in the lab &#x2013; so we give two links
+<a href="https://pushstack.wordpress.com/somfy-rts-protocol/">[1]​</a> <a href="https://pushstack.wordpress.com/2014/04/14/reversing-somfy-rts/">[2]​</a> where the reverse engineering and the format of the protocol is
+given. From that, you should be able to understand all the fields and to
+write your own decoder in the next step.</li>
+
+<li>URH is powerful enough to decode common used codes, but if there is more
+operation on the transmitter side, like cryptography or obfuscation, URH
+will need some help. Here, common decoders of URH will not be
+sufficient. We can resolve this by using a custom decoding script, which
+is a Python script &#x2013; written by ourselves &#x2013; that will decode a packet
+and bring its output to URH by the standard output stream. Go to <code>Edit</code>,
+<code>Decoding</code>, choose <code>External Program</code> and click on <code>Add to Your
+      Decoding</code>. The <code>Your Decoding</code> window is a stack of decoding function
+that can be combined to create really advanced decoder. In our case, we
+will only use our own script. In the <code>Decoder</code> field, enter the full path
+of the Python script, <i>e.g.</i>, <a href="exo2/scripts/urh_decoder.py"><code>/home/wisec/urh_decoder.py</code></a>. Now, URH will
+send the demodulated data to your script &#x2013; in the first argument,
+i.e. <code class="src src-python">sys.argv<span style="color: #4EB8CA;">[</span><span style="color: #ef6787;">1</span><span style="color: #4EB8CA;">]</span></code> To quickly test
+the script, you can either try it directly from the shell, or using the
+URH's <code>Test</code> field in the <code>Decoding</code> window where you can enter a signal
+example and see the output in the <code>Decoded Bits</code>.</li>
+
+<li><p>
+When you have finished to test the decoder, you can use it in URH by
+clicking on <code>Save as...</code> and giving a name to it (<i>e.g.</i>
+<code>SomfyRTS</code>). Close the <code>Decoding</code> window, and select your just created
+decoder <code>SomfyRTS</code> in the <code>Decoding</code> field. Beware that the script will
+squash the first 24-bit of the synchronization field, so you will have to
+re-set the URH annotations manually. After that, we end-up with this:
+</p>
+
+
+<div id="org2ade9bf" class="figure">
+<p><img src="pics/2021-02-15_11-11-08_screenshot.png" alt="2021-02-15_11-11-08_screenshot.png" />
+</p>
+<p><span class="figure-number">Figure 10: </span>Completely decoded packets with a custom Python script. Beware that we don't have the <code>Sync</code> field anymore!</p>
+</div></li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 17</dt><dd>The first message without the first synchronization field
+is: <code>1010 1001 0010 0010 0000001101101001 101100001000001100101101</code></dd>
+</dl>
+
+
+<ul class="org-ul">
+<li>We can see that the <code>0xA</code> is the fixed part of the key, then the <code>Ctr</code>
+which is the dynamic part of the key used for the XOR operation. Then we
+observe the <code>Ctrl</code> that indicate the pressed button, which is equal for
+two-by-two signals. Then we have the <code>Chk</code> that also change only
+two-by-two (because in the Counter field we have two bit flips which
+cancel each other in the Checksum). Finally, we have our <code>RC</code> field which
+once decrypted, is just equal to the counter in his lowermost
+bits. Finally, we have the <code>Addr</code> field which is constant because we used
+the same remote during all the test.</li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 18</dt><dd>The XOR provides "Security by obscurity", which is not
+considered as secure by the Kerckhoffs principle.</dd>
+
+<dt>Question 19</dt><dd>The purpose of the counter and the rolling code is to
+prevent replay attack. Indeed, if the receiver's counter is not
+synchronized with the transmitted counter, then it will refuse to execute
+the command. Then, the attacker has to guess the counter value or to read
+it by intercepting previous legitimate transmissions.</dd>
+</dl>
+
+
+<ul class="org-ul">
+<li>To compute the checksum used by this protocol, one can use the <a href="exo2/scripts/cks.py"><code>cks.py</code></a>
+script like this: <code>./cks.py
+      10101010001000000000001101101010101100001000001100101101</code>. This is a
+Python implementation of the checksum used in this protocol. Simply
+speaking, the checksum used is a XOR of all the bytes of the
+packets. This corresponds to a CRC polynome, that we can find in two way:
+<ol class="org-ol">
+<li><b>Hardware implementation</b>: By looking at Figure 1, Page 3 of this
+<a href="http://ww1.microchip.com/downloads/en/appnotes/00730a.pdf">MicroChip publication</a>, we can see that the higher order of the
+polynome define the size of the CRC, while the lower order define the
+XOR between the current CRC computation (initialized to 0) and the
+arriving data. Those two are mandatory. The others intermediate order
+define XOR inside the CRC being computed. By this graphical
+demonstration, we easily conclude that XORing all the bytes between
+themselves on a 4-bit value is equivalent to compute a CRC with the
+following polynome: \(x^4 + 1\), which is represented by <code>10001b</code> or
+<code>0x1</code>. Why not <code>0x17</code>? Because 4-bit CRCs are the most smallest ones,
+so the \(x^4\) term is implicit, then there is only the \(x^0 = 1\)
+defined by <code>0x1</code>.</li>
+<li><b>Theoretical verification</b>: On <a href="https://www.rndtool.info/CRC-step-by-step-calculator/">RNDTool.info</a>, by setting <code>CRC
+         polynomial as binary sequence</code> to <code>10001</code>, and <code>Message as binary
+         sequence</code> to
+<code>10101010001000000000001101101010101100001000001100101101</code>, and
+looking at <code>Remainder is:</code> in the polynomial division, we see that the
+remainder is \(x = x^1\). If you look at the LSBs &#x2013; <code>101101</code> &#x2013; of the
+message, that corresponds to the <code>10</code> just before the last <code>1</code>. And
+indeed, for this message in our protocol, the checksum was <code>0010</code>.</li>
+</ol></li>
+
+<li><p>
+Now that we know the polynome used by this protocol, we can configure our
+CRC computation into URH, so that it will be computed automatically. To
+do so, one must have a label called <code>checksum</code>, then right-click on the
+label in the bottom window, finally click on <code>Edit...</code>. Set the <code>Checksum
+      category</code> to <code>generic</code>, the <code>CRC function</code> to <code>Custom</code>, the <code>CRC
+      polynomial (hex)</code> to <code>1</code>, <code>Start value (hex)</code> to <code>0</code> and <code>Final XOR
+      (hex)</code> to <code>0</code>. Finally, set <code>Configure data ranges for CRC</code> to <code>1</code> to
+<code>12</code> and <code>17</code> to <code>56</code>. This tell URH to compute the CRC without using the
+checksum field itself, otherwise URH will compute a remainder of <code>0</code> for
+valid packets.
+</p>
+
+
+<div id="org56d8b80" class="figure">
+<p><img src="pics/2022-03-24_11-52-43.png" alt="2022-03-24_11-52-43.png" />
+</p>
+<p><span class="figure-number">Figure 11: </span>Messages with a valid CRC computation</p>
+</div>
+
+
+<div id="orgf7191a6" class="figure">
+<p><img src="pics/2022-03-24_11-53-28.png" alt="2022-03-24_11-53-28.png" />
+</p>
+<p><span class="figure-number">Figure 12: </span>Configuration of the CRC computation</p>
+</div></li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 20</dt><dd>A checksum is a code used to identify transmission
+errors. The correction is done by re transmitting the message if an error
+occurred. Different checksum algorithm exists, one of the most simple
+being the Single Parity Bit. The checksum used here is a CRC, with the
+\(x^4 + 1\) polynome.</dd>
+
+<dt>Question 21</dt><dd>Since there is a protection against replay attack, we
+can't generate an open packet at any time because we need the counter
+information. Thus, we can indeed generate an open command with the last
+valid command, because we can get the counter since we reversed the
+protocol.</dd>
+
+<dt>Question 22</dt><dd>If we spoof one legitimate command by sending a crafted
+command, the next legitimate command will be ignored by the curtain since
+it will not be synchronized anymore.</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org355188f" class="outline-2">
+<h2 id="org355188f"><span class="section-number-2">3.</span> Bonus: Spoof the Remote by Transmitting an "Open" Command</h2>
+<div class="outline-text-2" id="text-3">
+<dl class="org-dl">
+<dt>Question 23</dt><dd>Steps in URH to spoof a command:
+<ol class="org-ol">
+<li>Record a signal of one button press.</li>
+<li>Demodulate and decode it.</li>
+<li>Add the <a href="exo3/scripts/urh_encoder.py"><code>urh_encoder.py</code></a> script into the Encoder path of the Somfy
+Decoding profile.</li>
+<li>Go into the Generator tab.</li>
+<li>Increment the Counter and the Rolling Code.</li>
+<li>Modify the Control Code.</li>
+<li>Click on <code>Edit...</code> to set the carrier frequency to <code>433.42M</code>.</li>
+<li>Click on <code>Send data...</code>. Set the parameters and send the signal.</li>
+<li>The curtains should be hacked.</li>
+</ol></dd>
+</dl>
+
+
+<div id="orgea52c3e" class="figure">
+<p><img src="pics/2022-03-24_19-32-39.png" alt="2022-03-24_19-32-39.png" />
+</p>
+<p><span class="figure-number">Figure 13: </span>Spoofed packet</p>
+</div>
+
+
+<div id="orgb33ca97" class="figure">
+<p><img src="pics/2022-03-24_19-32-48.png" alt="2022-03-24_19-32-48.png" />
+</p>
+<p><span class="figure-number">Figure 14: </span>Modulation parameters</p>
+</div>
+
+
+<div id="orgb6899e2" class="figure">
+<p><img src="pics/2022-03-24_19-33-13.png" alt="2022-03-24_19-33-13.png" />
+</p>
+<p><span class="figure-number">Figure 15: </span>Sending signal window</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org100a5d8" class="outline-2">
+<h2 id="org100a5d8"><span class="section-number-2">4.</span> Bonus: Reversing the Hardware of the Remote</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li><p>
+Download and launch <a href="https://support.saleae.com/logic-software/legacy-software/older-software-releases">Salae Logic Analyzer v1</a>:
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">wget https://downloads.saleae.com/logic/1.2.40/Logic-1.2.40-Linux.AppImage
+chmod +x ./Logic-1.2.40-Linux.AppImage
+./Logic-1.2.40-Linux.AppImage
+</pre>
+</div></li>
+<li>Load the <a href="exo4/logicdata/curtains_logic_analyzer.logicdata"><code>curtains_logic_analyzer.logicdata</code></a> file by clicking on <code>Options</code>
+in the left upper corner, then <code>Open capture / setup</code>.</li>
+<li><p>
+First, we clearly see that the buttons control one transistor that itself
+control the radio control signal (meaning the digital signal that control
+the radio carrier emission). But each button has additional circuitry to
+modify this signal individually.
+</p>
+
+<div id="org252623f" class="figure">
+<p><img src="pics/2022-03-25_13-44-35.png" alt="2022-03-25_13-44-35.png" />
+</p>
+<p><span class="figure-number">Figure 16: </span>Pressing a button put on the radio</p>
+</div></li>
+<li>In the square wave of the radio control signal, a high voltage means to
+turn the radio carrier on, and a low voltage means to turn the carrier
+off. That is how symbols are generated.</li>
+<li><p>
+Secondly, if we compare two radio control signals between two buttons, we
+observe that the beginning is similar (sync packet and fixed key), bet then
+we have changes in the signal:
+</p>
+
+<div id="orga169a1d" class="figure">
+<p><img src="pics/2022-03-25_13-43-20.png" alt="2022-03-25_13-43-20.png" />
+</p>
+<p><span class="figure-number">Figure 17: </span>Button press 1</p>
+</div>
+
+<div id="orgce39942" class="figure">
+<p><img src="pics/2022-03-25_13-43-38.png" alt="2022-03-25_13-43-38.png" />
+</p>
+<p><span class="figure-number">Figure 18: </span>Button press 2</p>
+</div></li>
+<li>Comparing the two pictures, we can identify the counter increment: the
+first peak that is changing is one peak that goes from left (1st press) to
+right (2nd press). Remembering that those peaks encode logical bits in
+Manchester encoding, that means that we have <code>1010</code> = <code>00</code> in the first
+message, and <code>1001</code> = <code>01</code> in the second message. We can see two next peaks
+that move from left to right, encoding the control code.</li>
+</ul>
+
+
+<dl class="org-dl">
+<dt>Question 24</dt><dd>This hardware implement the protocol by sending a digital
+signal to a transistor that control the resonator. This signal controls if
+the resonator is able to emit the carrier through the antenna, or not. This
+signal depends on the pressed button. It encodes logical bits with a
+Manchester encoding.</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Pierre AYOUB</p>
+<p class="date">Created: 2022-03-25 ven. 14:32</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
