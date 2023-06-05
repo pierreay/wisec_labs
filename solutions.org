@@ -1,3 +1,6 @@
+:PROPERTIES:
+:ID:       68b12a18-458e-4a98-9c52-1df855767cd8
+:END:
 #+TITLE: Lab on Attacking the Lab -- Solutions
 #+AUTHOR: Pierre AYOUB
 #+EMAIL: pierre.ayoub@eurecom.fr
