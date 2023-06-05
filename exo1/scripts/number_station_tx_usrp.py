@@ -7,7 +7,7 @@
 # GNU Radio Python Flow Graph
 # Title: Number Station TX -- USRP
 # Author: pierre
-# GNU Radio version: 3.10.1.1
+# GNU Radio version: 3.10.5.1
 
 from packaging.version import Version as StrictVersion
 
@@ -81,6 +81,7 @@ class number_station_tx_usrp(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
+
         self.uhd_usrp_sink_0 = uhd.usrp_sink(
             ",".join(("", '')),
             uhd.stream_args(
@@ -101,7 +102,7 @@ class number_station_tx_usrp(gr.top_block, Qt.QWidget):
                 decimation=3,
                 taps=[],
                 fractional_bw=0)
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, '/home/pierre/work/pro/class/wisec_tp/exo1/complex/message.complex', True, 0, 0)
+        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, '../complex/message.complex', True, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
 
 

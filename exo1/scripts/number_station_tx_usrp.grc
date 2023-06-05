@@ -52,7 +52,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /home/pierre/work/pro/class/wisec_tp/exo1/complex/message.complex
+    file: ../complex/message.complex
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -371,3 +371,4 @@ connections:
 
 metadata:
   file_format: 1
+  grc_version: 3.10.5.1
