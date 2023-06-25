@@ -1,0 +1,8 @@
+* About
+
+Laboratories sessions I gave during WiSec class at EURECOM.
+
+* Organization
+
+- See [[file:instructions.pdf]] for exercises instructions.
+- See [[file:solutions.html]] for exercises solutions.
